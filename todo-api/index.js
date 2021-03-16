@@ -5,6 +5,9 @@ const redis = require('redis');
 var elasticsearch = require('elasticsearch');
 const envProps = require('./env_props');
 
+//const mongoClient = require('mongodb').MongoClient;
+//const mongoObjectID = require('mongodb').ObjectID;
+
 // Initializing the Express Framework /////////////////////////////////////////////////////
 const app = express();
 const port = 8080;
@@ -208,7 +211,49 @@ app.route('/api/v1/search').post(async (req, res) => {
             res.send([]);
         });
 });
+/*
+// Set up the API routes /////////////////////////////////////////////////////
+app.get('/health', (req, res) => {
+    var stat = {
+        app: 'OK',
+        mongo: mongoConnected
+    };
+    res.json(stat);
+});
 
+// set up Mongo
+// https://flaviocopes.com/node-mongodb/
+function mongoConnect() {
+    return new Promise((resolve, reject) => {
+        //var mongoURL = process.env.MONGO_URL || 'mongodb://mongodb:27017/users';
+        var mongoURL = process.env.MONGO_URL || 'mongodb://mongodb:27017';
+        mongoClient.connect(mongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, (error, client) => {
+            if(error) {
+                reject(error);
+            } else {
+                //db = _db;
+                //Now you can select a database using the client.db() method
+                const db = client.db('users');
+
+                usersCollection = db.collection('users');
+                resolve('connected');
+            }
+        });
+    });
+}
+
+function mongoLoop() {
+    mongoConnect().then((r) => {
+        mongoConnected = true;
+        logger.info('MongoDB connected');
+    }).catch((e) => {
+        logger.error('ERROR', e);
+        setTimeout(mongoLoop, 2000);
+    });
+}
+
+mongoLoop();
+*/
 // Start the server /////////////////////////////////////////////////////
 app.listen(port, () => {
     console.log('Todo API Server started!');

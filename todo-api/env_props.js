@@ -8,5 +8,6 @@ module.exports = {
     redisHost: process.env.REDIS_HOST,
     redisPort: process.env.REDIS_PORT,
     elasticHost: process.env.ELASTICSEARCH_HOST,
-    elasticPort: process.env.ELASTICSEARCH_PORT
+    elasticPort: process.env.ELASTICSEARCH_PORT,
+    mongoURL: process.env.MONGO_URL,
 };
