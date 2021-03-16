@@ -5,7 +5,7 @@ const redis = require('redis');
 var elasticsearch = require('elasticsearch');
 const envProps = require('./env_props');
 
-//const mongoClient = require('mongodb').MongoClient;
+const mongoClient = require('mongodb').MongoClient;
 //const mongoObjectID = require('mongodb').ObjectID;
 
 // Initializing the Express Framework /////////////////////////////////////////////////////
@@ -211,9 +211,9 @@ app.route('/api/v1/search').post(async (req, res) => {
             res.send([]);
         });
 });
-/*
+
 // Set up the API routes /////////////////////////////////////////////////////
-app.get('/health', (req, res) => {
+app.route('/health').get(async (req, res) => {
     var stat = {
         app: 'OK',
         mongo: mongoConnected
@@ -245,15 +245,16 @@ function mongoConnect() {
 function mongoLoop() {
     mongoConnect().then((r) => {
         mongoConnected = true;
-        logger.info('MongoDB connected');
+        console.log('MongoDB connected');
     }).catch((e) => {
-        logger.error('ERROR', e);
+        console.error('ERROR', e);
         setTimeout(mongoLoop, 2000);
     });
 }
 
 mongoLoop();
-*/
+
+
 // Start the server /////////////////////////////////////////////////////
 app.listen(port, () => {
     console.log('Todo API Server started!');

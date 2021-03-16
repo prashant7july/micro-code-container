@@ -66,4 +66,7 @@ docker network inspect todo-net
 # Front End
 curl -X GET http://localhost:8088/api/v1/todos
 
+# MongoDB Health
+curl -X GET http://localhost:8088/health
+
 
