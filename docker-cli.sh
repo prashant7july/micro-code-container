@@ -71,3 +71,6 @@ curl -X GET http://localhost:8088/health
 
 # Register API Curl Command -
 curl -X POST http://localhost:8088/api/v1/register -H 'content-type: application/json' -d '{"name": "Prashant", "email": "prashant7july@gmail.com", "password": "asjdhgad123"}'
+
+# Login API Curl Command -
+curl -X POST http://localhost:8088/api/v1/login -H 'content-type: application/json' -d '{"name":"Prashant","password":"asjdhgad123"}'

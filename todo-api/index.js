@@ -5,8 +5,12 @@ const redis = require('redis');
 var elasticsearch = require('elasticsearch');
 const envProps = require('./env_props');
 
+// MongoDB
 const mongoClient = require('mongodb').MongoClient;
 //const mongoObjectID = require('mongodb').ObjectID;
+var db;
+var usersCollection;
+var mongoConnected = false;
 
 // Initializing the Express Framework /////////////////////////////////////////////////////
 const app = express();
@@ -220,6 +224,41 @@ app.route('/health').get(async (req, res) => {
     };
     res.json(stat);
 });
+
+app.route('/api/v1/login').post(async (req, res) => {
+    //req.log.info('login', req.body);
+    console.info('login', req.body);
+    if(req.body.name === undefined || req.body.password === undefined) {
+        //req.log.warn('credentails not complete');
+        console.info('credentails not complete');
+        res.status(400).send('name or passowrd not supplied');
+    } else if(mongoConnected) {
+        usersCollection.findOne({
+            name: req.body.name,
+        }).then((user) => {
+            //req.log.info('user', user);
+            console.info('user', user);
+            if(user) {
+                if(user.password == req.body.password) {
+                    res.json(user);
+                } else {
+                    res.status(404).send('incorrect password');
+                }
+            } else {
+                res.status(404).send('name not found');
+            }
+        }).catch((e) => {
+            //req.log.error('ERROR', e);
+            console.error('ERROR', e);
+            res.status(500).send(e);
+        });
+    } else {
+        //req.log.error('database not available');
+        console.error('database not available');
+        res.status(500).send('database not available');
+    }
+});
+
 
 // TODO - validate email address format
 app.route('/api/v1/register').post(async (req, res) => {
