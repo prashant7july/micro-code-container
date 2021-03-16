@@ -212,13 +212,55 @@ app.route('/api/v1/search').post(async (req, res) => {
         });
 });
 
-// Set up the API routes /////////////////////////////////////////////////////
+// Set up the health API/Users API routes /////////////////////////////////////////////////////
 app.route('/health').get(async (req, res) => {
     var stat = {
         app: 'OK',
         mongo: mongoConnected
     };
     res.json(stat);
+});
+
+// TODO - validate email address format
+app.route('/api/v1/register').post(async (req, res) => {
+    //req.log.info('register', req.body);
+    console.log('register', req.body);
+    if(req.body.name === undefined || req.body.password === undefined || req.body.email === undefined) {
+        //req.log.warn('insufficient data');
+        res.status(400).send('insufficient data');
+    } else if(mongoConnected) {
+        // check if name already exists
+        usersCollection.findOne({name: req.body.name}).then((user) => {
+            if(user) {
+                //req.log.warn('user already exists');
+                console.log('user already exists');
+                res.status(400).send('name already exists');
+            } else {
+                // create new user
+                usersCollection.insertOne({
+                    name: req.body.name,
+                    password: req.body.password,
+                    email: req.body.email
+                }).then((r) => {
+                    //req.log.info('inserted', r.result);
+                    console.info('inserted', r.result)
+                    res.send('OK');
+                }).catch((e) => {
+                    //req.log.error('ERROR', e);
+                    console.error('ERROR', e);
+                    res.status(500).send(e);
+                });
+            }
+        }).catch((e) => {
+            //req.log.error('ERROR', e);
+            console.error('ERROR', e);
+            res.status(500).send(e);
+        });
+    } else {
+        //req.log.error('database not available');
+        console.error('database not available');
+        res.status(500).send('database not available');
+    }
 });
 
 // set up Mongo

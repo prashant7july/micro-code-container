@@ -69,4 +69,5 @@ curl -X GET http://localhost:8088/api/v1/todos
 # MongoDB Health
 curl -X GET http://localhost:8088/health
 
-
+# Register API Curl Command -
+curl -X POST http://localhost:8088/api/v1/register -H 'content-type: application/json' -d '{"name": "Prashant", "email": "prashant7july@gmail.com", "password": "asjdhgad123"}'
